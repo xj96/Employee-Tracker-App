@@ -31,7 +31,33 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
+    start();
 });
+
+function start() {
+    inquirer
+        .prompt({
+            name: "addViewUpdate",
+            type: "list",
+            message: "Would you like to ADD departments, roles, and employess, or VIEW departments, roles, and employees or UPDATE employee roles?",
+            choices: ["ADD", "VIEW", "UPDATE"]
+        })
+        .then(function (answer) {
+            // based on the users answer we are going to add, view, or update the specified information
+            if (answer.addViewUpdate === "ADD") {
+                // Run some function
+            } else if (answer.addViewUpdate === "VIEW") {
+                // Run some function
+            } else if (answer.addViewUpdate === "UPDATE") {
+                // Run some function
+            }
+            else {
+                connection.end();
+            }
+        });
+}
+
+
 
 
 
