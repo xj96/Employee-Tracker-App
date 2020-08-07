@@ -54,9 +54,9 @@ function start() {
                 // Run updateRole() function
                 updateRole()
             }
-            else {
-                connection.end();
-            }
+            // else {
+            //     connection.end();
+            // }
         });
 }
 
@@ -75,6 +75,7 @@ function addInfo() {
         .then(answer => {
             if (answer.add === "Department") {
                 // Run some code
+                addDepartment()
             }
             else if (answer.add === "Role") {
                 // Run some code
@@ -115,23 +116,86 @@ function viewInfo() {
         })
 }
 
-// function to handle adding content to the database
+// function to handle updating the roles content to the database
 function updateRole() {
-    // prompt user for what they want to add to the database
+    // prompt user on input for updating the roles database
     inquirer
         .prompt([
             {
-                name: "role",
+                name: "title",
                 type: "input",
-                message: "What role would you like to add?",
-            }
+                message: "What is the title of the role you would like to update?",
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the salary of the role you would like to update?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                },
+            },
+            {
+                name: "department_id",
+                type: "input",
+                message: "What is the department id of the role you would like to update?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                },
+            },
         ])
         .then(answer => {
-
+            connection.query(
+                "INSERT INTO role (title, salary, department_id) VALUES (?) ",
+                {
+                    title: answer.title,
+                    salary: answer.salary,
+                    department_id: answer.department_id,
+                    function(err, res) {
+                        if (err) throw err;
+                        console.log("You updated roles!");
+                        console.table(res)
+                        // re-prompt the user for if they want to do anything else with the database
+                        start();
+                    }
+                })
         })
 }
 
+// Add department
 
+function addDepartment(answer) {
+    connection.query
+        ("INSERT INTO department VALUES ?",
+            {
+                name: answer.name
+            },
+            function (err, res) {
+                if (err) throw err;
+                console.log("You added a department!");
+                console.table(res)
+                // re-prompt the user for if they want to do anything else with the database
+                start();
+            }
+        )
+}
+
+// Add role
+
+// Add employee
+
+
+
+// View department
+
+// View role
+
+// View employee
 
 
 
