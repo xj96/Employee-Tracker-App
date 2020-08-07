@@ -45,11 +45,14 @@ function start() {
         .then(function (answer) {
             // based on the users answer we are going to add, view, or update the specified information
             if (answer.addViewUpdate === "ADD") {
-                // Run some function
+                // Run addInfo() function
+                addInfo()
             } else if (answer.addViewUpdate === "VIEW") {
-                // Run some function
+                // Run viewInfo() function
+                viewInfo()
             } else if (answer.addViewUpdate === "UPDATE") {
-                // Run some function
+                // Run updateRole() function
+                updateRole()
             }
             else {
                 connection.end();
@@ -57,9 +60,76 @@ function start() {
         });
 }
 
+// function to handle adding content to the database
+function addInfo() {
+    // prompt user for what they want to add to the database
+    inquirer
+        .prompt([
+            {
+                name: "add",
+                type: "list",
+                message: "What would you like to add to the table?",
+                choices: ["Department", "Role", "Employee"]
+            }
+        ])
+        .then(answer => {
+            if (answer.add === "Department") {
+                // Run some code
+            }
+            else if (answer.add === "Role") {
+                // Run some code
+            }
+            else if (answer.add === "Employee") {
+                // Run some code
+            }
+            else {
+                start()
+            }
+        })
+}
 
+// function to handle viewing content from the database
+function viewInfo() {
+    // prompt user for what they want to view from the database
+    inquirer
+        .prompt([
+            {
+                name: "update",
+                type: "list",
+                message: "What would you like to view from the table?",
+                choices: ["Department", "Role", "Employee"]
+            }
+        ])
+        .then(answer => {
+            if (answer.add === "Department") {
+                // Run some code
+            }
+            else if (answer.add === "Role") {
+                // Run some code
+            }
+            else if (answer.add === "Employee") {
+                // Run some code
+            } else {
+                start()
+            }
+        })
+}
 
+// function to handle adding content to the database
+function updateRole() {
+    // prompt user for what they want to add to the database
+    inquirer
+        .prompt([
+            {
+                name: "role",
+                type: "input",
+                message: "What role would you like to add?",
+            }
+        ])
+        .then(answer => {
 
+        })
+}
 
 
 
