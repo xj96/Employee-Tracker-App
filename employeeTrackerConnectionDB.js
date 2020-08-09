@@ -54,9 +54,9 @@ function start() {
                 // Run updateRole() function
                 updateRole()
             }
-            // else {
-            //     connection.end();
-            // }
+            else {
+                connection.end();
+            }
         });
 }
 
@@ -72,13 +72,14 @@ function addInfo() {
                 choices: ["Department", "Role", "Employee"]
             }
         ])
-        .then(answer => {
+        .then(function (answer) {
             if (answer.add === "Department") {
                 // Run some code
                 addDepartment()
             }
             else if (answer.add === "Role") {
                 // Run some code
+
             }
             else if (answer.add === "Employee") {
                 // Run some code
@@ -95,21 +96,24 @@ function viewInfo() {
     inquirer
         .prompt([
             {
-                name: "update",
+                name: "view",
                 type: "list",
                 message: "What would you like to view from the table?",
                 choices: ["Department", "Role", "Employee"]
             }
         ])
         .then(answer => {
-            if (answer.add === "Department") {
+            if (answer.view === "Department") {
                 // Run some code
+                viewDepartments()
             }
-            else if (answer.add === "Role") {
+            else if (answer.view === "Role") {
                 // Run some code
+                viewRole()
             }
-            else if (answer.add === "Employee") {
+            else if (answer.view === "Employee") {
                 // Run some code
+                viewEmployee()
             } else {
                 start()
             }
@@ -119,12 +123,17 @@ function viewInfo() {
 // function to handle updating the roles content to the database
 function updateRole() {
     // prompt user on input for updating the roles database
+    connection.query(
+        "SELECT * FROM roles WHERE id = ?",
+    )
     inquirer
         .prompt([
+
             {
                 name: "title",
-                type: "input",
+                type: "list",
                 message: "What is the title of the role you would like to update?",
+                choices: ["Developer"]
             },
             {
                 name: "salary",
@@ -156,29 +165,40 @@ function updateRole() {
                     title: answer.title,
                     salary: answer.salary,
                     department_id: answer.department_id,
-                    function(err, res) {
-                        if (err) throw err;
-                        console.log("You updated roles!");
-                        console.table(res)
-                        // re-prompt the user for if they want to do anything else with the database
-                        start();
-                    }
-                })
+                },
+                function (err, res) {
+                    console.log(err)
+                    if (err) throw err;
+                    console.log("You updated roles!");
+                    console.table(res.data)
+                    // re-prompt the user for if they want to do anything else with the database
+                    start()
+                }
+            )
         })
 }
 
 // Add department
 
 function addDepartment(answer) {
+    inquirer.prompt(
+        [
+            {
+                type: "input",
+                message: "Enter the new department name:",
+                name: "name",
+            },
+        ]
+    )
     connection.query
-        ("INSERT INTO department VALUES ?",
+        ("INSERT INTO department SET ?",
             {
                 name: answer.name
             },
             function (err, res) {
                 if (err) throw err;
                 console.log("You added a department!");
-                console.table(res)
+                console.table(res.data)
                 // re-prompt the user for if they want to do anything else with the database
                 start();
             }
@@ -191,11 +211,32 @@ function addDepartment(answer) {
 
 
 
-// View department
+// View department name w/ employees
+
+function viewDepartments() {
+    console.log("Viewing Departments...")
+    const departments = connection.query("SELECT * FROM employee_trackerDB.departments")
+    console.table([departments])
+    start()
+}
 
 // View role
 
+function viewRole() {
+    console.log("Viewing Roles...")
+    const role = connection.query("SELECT * FROM employee_trackerDB.role")
+    console.table([role])
+    start()
+}
+
 // View employee
+
+function viewEmployee() {
+    console.log("Viewing Employees...")
+    const employee = connection.query("SELECT * FROM employee_trackerDB.employee")
+    console.table([employee])
+    start()
+}
 
 
 
